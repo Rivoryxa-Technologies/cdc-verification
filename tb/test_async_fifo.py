@@ -31,8 +31,8 @@ async def test_async_fifo(dut):
     """Push N words through the async FIFO across two independent clocks and
     check they come out exactly once, in order, with no loss or duplication."""
     # two unrelated clocks
-    cocotb.start_soon(Clock(dut.wclk, 10, units="ns").start())
-    cocotb.start_soon(Clock(dut.rclk, 13, units="ns").start())
+    cocotb.start_soon(Clock(dut.wclk, 10, unit="ns").start())
+    cocotb.start_soon(Clock(dut.rclk, 13, unit="ns").start())
 
     await reset(dut)
 
