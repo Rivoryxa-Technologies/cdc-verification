@@ -6,6 +6,8 @@ truly independent clocks with a self-checking cocotb testbench.
 
 Runs on free, open-source simulators (Icarus Verilog or Verilator) via cocotb.
 
+> **Verified:** passes on cocotb 2.x with Icarus Verilog: 256 words cross the two-clock FIFO with no loss or duplication.
+
 ## Why CDC is its own problem
 
 When data crosses between two unrelated clocks, a naive register can go
