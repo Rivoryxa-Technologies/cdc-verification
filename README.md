@@ -62,4 +62,4 @@ asynchronous clocks) applies to control crossings and multi-bit buses.
 
 This is our public reference flow for clock-domain-crossing verification. On a client block we deliver the same thing at full scale: a cocotb or SystemVerilog testbench that drives every crossing from truly independent clocks with randomized backpressure, a data-integrity check across the boundary, and, where the structure allows it, a formal proof of the synchronizer and pointer properties with SymbiYosys. Results ship as a rerunnable regression plus a written report.
 
-See the [Rivoryxa profile](https://github.com/Rivoryxa-Technologies) for our full service list and the evidence behind each one, or reach us on [LinkedIn](https://www.linkedin.com/company/rivoryxa-technologies/).
+See the [Rivoryxa profile](https://github.com/Rivoryxa-Technologies) for our full service list, or reach us on [LinkedIn](https://www.linkedin.com/company/rivoryxa-technologies/).
