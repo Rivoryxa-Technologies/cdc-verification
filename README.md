@@ -56,8 +56,10 @@ make
 
 An async FIFO is the workhorse CDC structure, but the same discipline
 (synchronize, Gray-code, handshake, then verify integrity across real
-asynchronous clocks) applies to control crossings and multi-bit buses. Want a
-CDC sign-off, or lint plus formal review on a specific block? Reach out.
+asynchronous clocks) applies to control crossings and multi-bit buses.
 
----
-Maintained by [Rivoryxa Technologies](https://www.linkedin.com/company/rivoryxa-technologies/).
+## What Rivoryxa delivers with this
+
+This is our public reference flow for clock-domain-crossing verification. On a client block we deliver the same thing at full scale: a cocotb or SystemVerilog testbench that drives every crossing from truly independent clocks with randomized backpressure, a data-integrity check across the boundary, and, where the structure allows it, a formal proof of the synchronizer and pointer properties with SymbiYosys. Results ship as a rerunnable regression plus a written report.
+
+See the [Rivoryxa profile](https://github.com/Rivoryxa-Technologies) for our full service list and the evidence behind each one, or reach us on [LinkedIn](https://www.linkedin.com/company/rivoryxa-technologies/).
