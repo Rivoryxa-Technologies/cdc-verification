@@ -6,7 +6,7 @@ SIM ?= icarus
 
 VERILOG_SOURCES = $(PWD)/rtl/async_fifo.sv $(PWD)/rtl/sync_2ff.sv
 TOPLEVEL = async_fifo
-MODULE = test_async_fifo
+COCOTB_TEST_MODULES = test_async_fifo
 
 export PYTHONPATH := $(PWD)/tb:$(PYTHONPATH)
 
