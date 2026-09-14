@@ -1,0 +1,37 @@
+rm -f /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow.xml
+mkdir -p /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow
+/opt/homebrew/bin/iverilog -o /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow/sim.vvp -s async_fifo -g2012 -f /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow/cmds.f  /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/async_fifo_bug.sv /Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/sync_2ff.sv
+rm -f /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow.xml
+COCOTB_TEST_MODULES=test_async_fifo COCOTB_TESTCASE=  COCOTB_TOPLEVEL=async_fifo TOPLEVEL_LANG=verilog       \
+		 /opt/homebrew/bin/vvp -m /Users/avishas/developer/rivoryxa-audit/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_icarus.so   /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow/sim.vvp   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/Users/avishas/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/libpython3.12.dylib'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:234  in gpi_load_users                  Running entry func 'initialize' from loaded library '/Users/avishas/developer/rivoryxa-audit/.venv/lib/python3.12/site-packages/cocotb/simulator.cpython-312-darwin.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:115  in initialize                      Using Python 3.12.10 interpreter at /Users/avishas/developer/rivoryxa-audit/.venv/bin/python
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1789414080
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /Users/avishas/developer/rivoryxa-audit/.venv/lib/python3.12/site-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 13.0 (stable)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test_async_fifo.test_async_fifo (1/2)
+                                                            Push N words through the async FIFO across two independent clocks and
+  4790.50ns INFO     cocotb.async_fifo                  PASS: 256 words crossed the CDC FIFO intact
+  4790.50ns INFO     cocotb.regression                  test_async_fifo.test_async_fifo passed
+  4790.50ns INFO     cocotb.regression                  running test_async_fifo.test_full_empty_reset_ordering (2/2)
+                                                            Rejected full writes must not corrupt queued words; reset flushes both sides.
+  5226.00ns WARNING  cocotb.regression                  test_async_fifo.test_full_empty_reset_ordering failed
+                                                        Traceback (most recent call last):
+                                                          File "/Users/avishas/developer/rivoryxa-audit/cdc-verification/tb/test_async_fifo.py", line 125, in test_full_empty_reset_ordering
+                                                            await pop(value)
+                                                          File "/Users/avishas/developer/rivoryxa-audit/cdc-verification/tb/test_async_fifo.py", line 113, in pop
+                                                            assert actual == expected, f"ORDER_MISMATCH: expected {expected}, got {actual}"
+                                                        AssertionError: ORDER_MISMATCH: expected 0, got 203
+                                                        assert 203 == 0
+  5226.00ns INFO     cocotb.regression                  ********************************************************************************************************
+                                                        ** TEST                                            STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        ********************************************************************************************************
+                                                        ** test_async_fifo.test_async_fifo                  PASS        4790.50           0.02     215467.19  **
+                                                        ** test_async_fifo.test_full_empty_reset_ordering   FAIL         435.50           0.00     269346.73  **
+                                                        ********************************************************************************************************
+                                                        ** TESTS=2 PASS=1 FAIL=1 SKIP=0                                 5226.00           0.03     208059.04  **
+                                                        ********************************************************************************************************
+make: *** [/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow.xml] Error 1

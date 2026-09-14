@@ -1,0 +1,89 @@
+{
+  "environment": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "python": "3.12.12",
+    "icarus": "Icarus Verilog version 13.0 (stable) (v13_0)",
+    "cocotb": "2.1.0",
+    "machdep.cpu.brand_string": "Apple M4",
+    "hw.memsize": "17179869184"
+  },
+  "results": [
+    {
+      "name": "seeded_overflow",
+      "seeded": true,
+      "clocks_ns": [
+        10,
+        13
+      ],
+      "seconds": 1.043,
+      "rc": 2,
+      "tests": 2,
+      "failures": 1,
+      "expected_result": true,
+      "command": [
+        "make",
+        "SIM_BUILD=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow",
+        "COCOTB_RESULTS_FILE=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/seeded_overflow.xml",
+        "VERILOG_SOURCES=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/async_fifo_bug.sv /Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/sync_2ff.sv"
+      ]
+    },
+    {
+      "name": "fixed_10_13",
+      "seeded": false,
+      "clocks_ns": [
+        10,
+        13
+      ],
+      "seconds": 0.947,
+      "rc": 0,
+      "tests": 2,
+      "failures": 0,
+      "expected_result": true,
+      "command": [
+        "make",
+        "SIM_BUILD=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_10_13",
+        "COCOTB_RESULTS_FILE=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_10_13.xml",
+        "VERILOG_SOURCES=/Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/async_fifo.sv /Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/sync_2ff.sv"
+      ]
+    },
+    {
+      "name": "fixed_17_10",
+      "seeded": false,
+      "clocks_ns": [
+        17,
+        10
+      ],
+      "seconds": 0.994,
+      "rc": 0,
+      "tests": 2,
+      "failures": 0,
+      "expected_result": true,
+      "command": [
+        "make",
+        "SIM_BUILD=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_17_10",
+        "COCOTB_RESULTS_FILE=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_17_10.xml",
+        "VERILOG_SOURCES=/Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/async_fifo.sv /Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/sync_2ff.sv"
+      ]
+    },
+    {
+      "name": "fixed_7_19",
+      "seeded": false,
+      "clocks_ns": [
+        7,
+        19
+      ],
+      "seconds": 0.996,
+      "rc": 0,
+      "tests": 2,
+      "failures": 0,
+      "expected_result": true,
+      "command": [
+        "make",
+        "SIM_BUILD=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_7_19",
+        "COCOTB_RESULTS_FILE=/var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_7_19.xml",
+        "VERILOG_SOURCES=/Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/async_fifo.sv /Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/sync_2ff.sv"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+rm -f /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_17_10.xml
+mkdir -p /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_17_10
+/opt/homebrew/bin/iverilog -o /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_17_10/sim.vvp -s async_fifo -g2012 -f /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_17_10/cmds.f  /Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/async_fifo.sv /Users/avishas/developer/rivoryxa-audit/cdc-verification/rtl/sync_2ff.sv
+rm -f /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_17_10.xml
+COCOTB_TEST_MODULES=test_async_fifo COCOTB_TESTCASE=  COCOTB_TOPLEVEL=async_fifo TOPLEVEL_LANG=verilog       \
+		 /opt/homebrew/bin/vvp -m /Users/avishas/developer/rivoryxa-audit/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_icarus.so   /var/folders/1g/5hn2qb017zs_2y2m1pl2jfl40000gn/T/fifo-evidence-3t6eori2/fixed_17_10/sim.vvp   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/Users/avishas/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/libpython3.12.dylib'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:234  in gpi_load_users                  Running entry func 'initialize' from loaded library '/Users/avishas/developer/rivoryxa-audit/.venv/lib/python3.12/site-packages/cocotb/simulator.cpython-312-darwin.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:115  in initialize                      Using Python 3.12.10 interpreter at /Users/avishas/developer/rivoryxa-audit/.venv/bin/python
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1789414082
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /Users/avishas/developer/rivoryxa-audit/.venv/lib/python3.12/site-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 13.0 (stable)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test_async_fifo.test_async_fifo (1/2)
+                                                            Push N words through the async FIFO across two independent clocks and
+  6415.00ns INFO     cocotb.async_fifo                  PASS: 256 words crossed the CDC FIFO intact
+  6415.00ns INFO     cocotb.regression                  test_async_fifo.test_async_fifo passed
+  6415.00ns INFO     cocotb.regression                  running test_async_fifo.test_full_empty_reset_ordering (2/2)
+                                                            Rejected full writes must not corrupt queued words; reset flushes both sides.
+  9010.00ns INFO     cocotb.async_fifo                  COVER: full rejection, empty rejection, pointer wrap, queued reset, ordering; clocks=17/10 ns
+  9010.00ns INFO     cocotb.regression                  test_async_fifo.test_full_empty_reset_ordering passed
+  9010.00ns INFO     cocotb.regression                  ********************************************************************************************************
+                                                        ** TEST                                            STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        ********************************************************************************************************
+                                                        ** test_async_fifo.test_async_fifo                  PASS        6415.00           0.03     250994.45  **
+                                                        ** test_async_fifo.test_full_empty_reset_ordering   PASS        2595.00           0.01     340266.51  **
+                                                        ********************************************************************************************************
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0                                 9010.00           0.03     265582.30  **
+                                                        ********************************************************************************************************
