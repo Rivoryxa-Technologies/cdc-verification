@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="cocotb tests"><testsuite name="test_async_fifo" errors="0" failures="1" skipped="0" tests="2" time="0.024" timestamp="2026-09-14T19:28:00.451232+00:00" hostname="AVIIS-MAC-AIR.local"><testcase classname="test_async_fifo" name="test_async_fifo" time="0.022"><properties><property name="cocotb" value="True" /><property name="random_seed" value="1789414080" /><property name="file" value="/Users/avishas/developer/rivoryxa-audit/cdc-verification/tb/test_async_fifo.py" /><property name="line" value="30" /><property name="sim_time_unit" value="ns" /><property name="sim_time_start" value="0.0" /><property name="sim_time_stop" value="4790.5" /><property name="sim_time_duration" value="4790.5" /><property name="sim_time_ratio" value="215467.19367468823" /></properties></testcase><testcase classname="test_async_fifo" name="test_full_empty_reset_ordering" time="0.002"><failure message="ORDER_MISMATCH: expected 0, got 203&#10;assert 203 == 0" type="AssertionError">Traceback (most recent call last):
+  File "/Users/avishas/developer/rivoryxa-audit/cdc-verification/tb/test_async_fifo.py", line 125, in test_full_empty_reset_ordering
+    await pop(value)
+  File "/Users/avishas/developer/rivoryxa-audit/cdc-verification/tb/test_async_fifo.py", line 113, in pop
+    assert actual == expected, f"ORDER_MISMATCH: expected {expected}, got {actual}"
+AssertionError: ORDER_MISMATCH: expected 0, got 203
+assert 203 == 0
+</failure><properties><property name="cocotb" value="True" /><property name="random_seed" value="1789414080" /><property name="file" value="/Users/avishas/developer/rivoryxa-audit/cdc-verification/tb/test_async_fifo.py" /><property name="line" value="84" /><property name="sim_time_unit" value="ns" /><property name="sim_time_start" value="4790.501" /><property name="sim_time_stop" value="5226.001" /><property name="sim_time_duration" value="435.5" /><property name="sim_time_ratio" value="269346.7335411235" /></properties><system-err>Test failed with COCOTB_RANDOM_SEED=1789414080
+</system-err></testcase></testsuite></testsuites>

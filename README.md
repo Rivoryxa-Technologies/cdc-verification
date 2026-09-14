@@ -1,65 +1,95 @@
-# cdc-verification
+# Asynchronous FIFO functional verification
 
-A clock domain crossing (CDC) verification example: a dual clock asynchronous
-FIFO with Gray code pointers and two flop synchronizers, checked across two
-truly independent clocks with a self checking cocotb testbench.
+A public, deliberately seeded demonstration of bug reproduction and regression
+coverage. This is not a client engagement or a production result. The design is
+a small dual-clock FIFO; the checks are functional simulation, not CDC signoff.
 
-Runs on free, open source simulators (Icarus Verilog or Verilator) via cocotb.
+## Problem and expected behavior
 
-> **Verified:** passes on cocotb 2.x with Icarus Verilog: 256 words cross the two clock FIFO with no loss or duplication.
+A write while `wfull` is asserted must be rejected without changing unread data.
+A read while `rempty` is asserted must not advance the queue. Accepted words must
+arrive once and in order. Coordinated reset of both domains flushes queued data,
+and transfers must restart correctly afterward.
 
-## Why CDC is its own problem
+The original random 256-word test never writes while full. It therefore passes
+on the deliberately broken variant below. A new directed test fills the FIFO,
+attempts three rejected writes, drains and checks the original contents, repeats
+across pointer wrap, attempts empty reads, and resets with words still queued.
 
-When data crosses between two unrelated clocks, a naive register can go
-metastable, and different bits of a bus can settle in different cycles. The
-result is bugs that single clock simulation never sees and that show up only
-occasionally in silicon. CDC verification is about proving the crossing
-structures (synchronizers, Gray coded pointers, handshakes) actually preserve
-data and never lose or duplicate it.
+## Deliberately introduced bug, root cause, and fix
 
-## What is here
+`scripts/reproduce.py` creates a temporary RTL copy with this one-line mutation:
 
+```systemverilog
+// Deliberate bug: a rejected full write overwrites an unread memory location.
+if (winc) mem[wbin[ASIZE-1:0]] <= wdata;
+
+// Correct implementation, already present in rtl/async_fifo.sv:
+if (winc && !wfull) mem[wbin[ASIZE-1:0]] <= wdata;
 ```
-rtl/async_fifo.sv      dual clock async FIFO: Gray pointers + 2-flop synchronizers
-rtl/sync_2ff.sv        reusable N-flop synchronizer primitive
-tb/test_async_fifo.py  cocotb testbench: two independent clocks, integrity check
-Makefile               cocotb run flow
-```
 
-The FIFO uses the classic safe CDC recipe:
+When full, the write pointer stops advancing. Without the memory-write guard,
+new data still replaces an unread word at that pointer. The directed test fails
+with `ORDER_MISMATCH`. Restoring the guard makes the same check pass. The mutant
+exists only in the runner's temporary directory; production RTL is not patched
+in place. This exercise demonstrates a previously untested scenario, not a newly
+discovered defect in the committed FIFO.
 
-- **Gray code pointers** so only one bit changes per step, which means the
-  pointer value crossing the clock boundary always samples to a legal value.
-- **Two flop synchronizers** on each pointer as it enters the opposite domain.
-- **Full and empty** derived from the synchronized pointers, so neither side
-  overruns the other.
+## Reproduce
 
-## What the test proves
-
-The testbench runs the write and read sides on **two independent clocks** at
-different frequencies, with randomized backpressure on both, then checks that
-every word comes out exactly once and in order, with no loss and no duplication.
-
-Functional simulation does not model metastability itself (that is a physical
-and formal concern); what it proves here is that the pointer, Gray code, and
-full/empty logic keep the data intact when the two clocks run asynchronously.
-
-## Run it
+Install Python 3.12, make, and Icarus Verilog (`brew install icarus-verilog` on
+macOS, or your Linux package manager). From a fresh clone:
 
 ```bash
-pip install cocotb
-sudo apt-get install iverilog   # or: brew install icarus-verilog
-make
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+python scripts/reproduce.py
 ```
 
-## Notes
+The script uses a fresh build directory for every case and writes logs, JUnit
+results and `summary.json` under `evidence/local/`. Override with `--out DIR`.
+It requires exactly two tests: one expected directed failure on the mutant, then
+zero failures on the correct design at 10/13, 17/10 and 7/19 ns write/read periods.
+Missing result files, compile failures or timeouts cannot satisfy those checks.
+The script exits nonzero if any expected result is absent. Each simulation has
+a 100 us simulation-time bound and each make process group has a 90-second wall
+limit. Ordinary `make` runs both tests on the correct design at 10/13 ns.
 
-An async FIFO is the workhorse CDC structure, but the same discipline
-(synchronize, Gray code, handshake, then verify integrity across real
-asynchronous clocks) applies to control crossings and multibit buses.
+Use a matching Icarus compiler and runtime. In this audit the OSS CAD Suite vvp
+wrapper overrode Python runtime paths and prevented cocotb from starting;
+Homebrew Icarus worked. Do not reuse a compiled `sim_build` after switching
+simulator versions. Such startup errors are blocked checks, not RTL failures.
 
-## What Rivoryxa delivers with this
+## Measured evidence
 
-This is our public reference flow for clock domain crossing verification. On a client block we deliver the same thing at full scale: a cocotb or SystemVerilog testbench that drives every crossing from truly independent clocks with randomized backpressure, a data integrity check across the boundary, and, where the structure allows it, a formal proof of the synchronizer and pointer properties with SymbiYosys. Results ship as a rerunnable regression plus a written report.
+`evidence/audit-2026-09-15/` contains actual logs, XML and commands. Environment:
+Apple M4, 16 GiB RAM, macOS 26.6.2 arm64; Python 3.12.12, cocotb 2.1.0,
+Icarus Verilog 13.0 (stable).
 
-See the [Rivoryxa profile](https://github.com/Rivoryxa-Technologies) for our full service list, or reach us on [LinkedIn](https://www.linkedin.com/company/rivoryxa-technologies/).
+| Variant | Write/read periods, ns | Test result | Build + run seconds |
+|---|---|---|---:|
+| Deliberate overflow mutant | 10 / 13 | Original random test passes; directed test fails | 1.043 |
+| Correct guarded write | 10 / 13 | 2 pass, 0 fail | 0.947 |
+| Correct guarded write | 17 / 10 | 2 pass, 0 fail | 0.994 |
+| Correct guarded write | 7 / 19 | 2 pass, 0 fail | 0.996 |
+
+These are measured command runtimes, including build and simulator startup.
+They are not engineering-effort estimates or promised client turnaround times.
+Manual work included writing and reviewing the directed scenario, diagnosing the
+Python/runtime mismatch, and inspecting the failing and passing evidence.
+CI runs the same expected-failure and passing checks, with its own tool versions
+recorded in uploaded artifacts.
+
+## Limits
+
+- Default 8-bit words and depth 16 only; no parameter sweep or exhaustive proof.
+- Three clock-period pairs and one fixed random seed, not all phases or ratios.
+- Coordinated reset while both sides are idle discards queued data. Independent
+  one-sided reset and reset during a transfer are not verified.
+- Digital simulation does not model electrical metastability or verify physical
+  Gray-bus skew constraints. This does not replace structural CDC analysis.
+- `sync_2ff.sv` is compiled but is not instantiated by this FIFO; these runs do
+  not separately verify that reusable module.
+- Coverage here is directed scenario checks and a log marker, not structural or
+  exhaustive functional coverage.
